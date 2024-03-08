@@ -1,13 +1,22 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
 use_frameworks!
 
-platform :ios, '10.0'
+platform :ios, '13.0'
 
 target 'TorManager_Example' do
   pod 'TorManager', :path => '../'
+end
 
-  target 'TorManager_Tests' do
-    inherit! :search_paths
-
-    
+# Elevate all dependencies to iOS 12, as Xcode 15 doesn't support older versions.
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    if target.respond_to?(:name) and !target.name.start_with?("Pods-")
+      target.build_configurations.each do |config|
+        if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 12
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+        end
+      end
+    end
   end
 end

@@ -1,0 +1,51 @@
+PODS:
+  - Eureka (5.4.0)
+  - IPtProxy (3.4.0)
+  - IPtProxyUI (4.3.1):
+    - Eureka (~> 5.3)
+    - IPtProxy (~> 3.4.0)
+    - IPtProxyUI/App (= 4.3.1)
+  - IPtProxyUI/App (4.3.1):
+    - Eureka (~> 5.3)
+    - IPtProxy (~> 3.4.0)
+    - ProgressHUD (~> 14.1)
+  - OrbotKit (1.1.0)
+  - ProgressHUD (14.1.1)
+  - Tor/Core (408.10.1)
+  - Tor/CTor (408.10.1):
+    - Tor/Core
+  - Tor/GeoIP (408.10.1):
+    - Tor/CTor
+  - TorManager (0.1.0):
+    - IPtProxyUI (~> 4.3)
+    - OrbotKit (~> 1.1)
+    - Tor/GeoIP (~> 408.10)
+
+DEPENDENCIES:
+  - TorManager (from `../`)
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - Eureka
+    - IPtProxy
+    - IPtProxyUI
+    - OrbotKit
+    - ProgressHUD
+    - Tor
+
+EXTERNAL SOURCES:
+  TorManager:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Eureka: fadaa9fa3d6e402d3c60f78f24edf3d7bafc9c29
+  IPtProxy: dfaa1f21006ca758f9966548f1869a8e29e7b72e
+  IPtProxyUI: 0e8ebcca4aa89812f1b16591e18732dc3c7aecd1
+  OrbotKit: 5e69508dee1943144fefa18a197fbf2030dfbe36
+  ProgressHUD: abb9136ae23c85204236828562cb9a8ec98efb44
+  Tor: 4aa4aee031f892efa43d1afb01c90565990c6312
+  TorManager: a7f1597f1d74e1fb16fef76f32b910dbf75f199a
+
+PODFILE CHECKSUM: 4e1845683471b3c5813dd6cbfcd860b7141f27e5
+
+COCOAPODS: 1.15.2

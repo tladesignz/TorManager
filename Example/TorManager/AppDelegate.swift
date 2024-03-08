@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import TorManager
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,8 +15,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool 
+    {
+        TorManager.shared.start { error in
+            print("[\(String(describing: type(of: self)))] error=\(error?.localizedDescription ?? "(nil)")")
+
+            let config = URLSessionConfiguration.default
+            config.connectionProxyDictionary = TorManager.shared.torSocks5ProxyConf
+
+            let session = URLSession(configuration: config)
+
+            let request = URLRequest(url: URL(string: "https://check.torproject.org")!)
+
+            print(request)
+
+            session.dataTask(with: request) { data, response, error in
+                if let response = response {
+                    print(response)
+                }
+
+                if let error = error {
+                    print(error)
+                }
+
+                if let data = data {
+                    print(String(data: data, encoding: .utf8) ?? "(nil)")
+                }
+            }.resume()
+        }
+
+
+
         return true
     }
 
@@ -40,7 +70,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
 }
 
+extension TorManager {
+
+   static let shared = TorManager(
+    directory: FileManager.default.urls(
+        for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("tor", isDirectory: true))
+}

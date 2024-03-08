@@ -35,5 +35,9 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>orbot</string>
+	</array>
 </dict>
 </plist>
