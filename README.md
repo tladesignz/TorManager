@@ -107,6 +107,12 @@ it, simply add the following line to your Podfile:
 pod 'TorManager'
 ```
 
+## Build
+
+```sh
+pod trunk push --allow-warnings
+```
+
 ## Author
 
 Benjamin Erhart, berhart@netzarchitekten.com

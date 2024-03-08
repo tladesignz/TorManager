@@ -36,6 +36,8 @@ This library bundles all building blocks to integrate Tor into your app:
   # Needed because of the IPtProxy go-mobile library.
   s.static_framework = true
 
+  s.swift_version = '5.5'
+
   s.source_files = 'TorManager/Classes/**/*'
   
   # s.resource_bundles = {
