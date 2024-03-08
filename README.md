@@ -78,6 +78,26 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 
+C-Tor will be compiled on your machine, hence you need to have the necessary dependencies available:
+
+```sh
+brew install automake autoconf libtool gettext
+```
+
+For more details, see the [Tor.framework README](https://github.com/iCepa/Tor.framework/blob/pure_pod/README.md)
+
+
+### iOS Orbot support
+
+Please add the following to your `Info.plist` file for Orbot support to work:
+
+ ```xml
+ <key>LSApplicationQueriesSchemes</key>
+ <array>
+     <string>orbot</string>
+ </array>
+ ```
+
 ## Installation
 
 TorManager is available through [CocoaPods](https://cocoapods.org). To install

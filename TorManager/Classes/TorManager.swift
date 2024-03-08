@@ -9,8 +9,11 @@
 import Foundation
 import Tor
 import IPtProxyUI
-import OrbotKit
 import Network
+
+#if os(iOS)
+import OrbotKit
+#endif
 
 open class TorManager: BridgesConfDelegate {
 
@@ -468,18 +471,21 @@ open class TorManager: BridgesConfDelegate {
 
      Read OrbotKit's documentation on how to acquire an API token.
 
+     - note: This method does nothing on macOS. `OrbotKit` only supports iOS, since Orbot macOS doesn't have any API at the moment.
+
      - returns: Tuple with `running` flag indicating if Orbot is running, and `bypassPort`, indicating the port on localhost to bypass Orbot.
      */
     open func evaluateOrbot() -> (running: Bool, bypassPort: UInt16?) {
+        var running = false
+        var bypassPort: UInt16? = nil
+
+#if os(iOS)
         guard OrbotKit.shared.installed else {
-            return (false, nil)
+            return (running, bypassPort)
         }
 
         let group = DispatchGroup()
         group.enter()
-
-        var running = false
-        var bypassPort: UInt16? = nil
 
         OrbotKit.shared.info { info, error in
             switch info?.status {
@@ -507,6 +513,7 @@ open class TorManager: BridgesConfDelegate {
         }
 
         _ = group.wait(timeout: .now() + 0.5)
+#endif
 
         return (running, bypassPort)
     }

@@ -44,8 +44,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }.resume()
         }
 
-
-
         return true
     }
 

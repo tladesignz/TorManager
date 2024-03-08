@@ -45,6 +45,6 @@ This library bundles all building blocks to integrate Tor into your app:
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.dependency 'Tor/GeoIP', '~> 408.10'
   s.dependency 'IPtProxyUI', '~> 4.3'
-  s.dependency 'OrbotKit', '~> 1.1'
+  s.ios.dependency 'OrbotKit', '~> 1.1'
 
 end

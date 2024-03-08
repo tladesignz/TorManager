@@ -2,9 +2,15 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 use_frameworks!
 
-platform :ios, '13.0'
-
 target 'TorManager_Example' do
+  platform :ios, '13.0'
+
+  pod 'TorManager', :path => '../'
+end
+
+target 'Example macOS' do
+  platform :macos, '11'
+  
   pod 'TorManager', :path => '../'
 end
 
