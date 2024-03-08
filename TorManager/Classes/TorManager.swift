@@ -349,6 +349,8 @@ open class TorManager: BridgesConfDelegate {
                         self.transport = .none
                     }
                 }
+
+                block()
             }
         }
         else {
