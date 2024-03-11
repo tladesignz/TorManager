@@ -35,6 +35,7 @@
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		93851621019FD49D281D01DD /* Pods-Example macOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example macOS.debug.xcconfig"; path = "Target Support Files/Pods-Example macOS/Pods-Example macOS.debug.xcconfig"; sourceTree = "<group>"; };
 		979C2A040AD1A468ED582C8F /* Pods-TorManager_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TorManager_Tests.debug.xcconfig"; path = "Target Support Files/Pods-TorManager_Tests/Pods-TorManager_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		A044B6B42B9F3BF6007B29A7 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
 		A0F99C612B9B6EBE00B5335A /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = "<group>"; };
 		A0F99C662B9B702600B5335A /* Example macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Example macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0F99C682B9B702600B5335A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -136,6 +137,7 @@
 				A0F99C752B9B704700B5335A /* Podfile */,
 				A0F99C762B9B704700B5335A /* Podfile.lock */,
 				A0F99C612B9B6EBE00B5335A /* .gitignore */,
+				A044B6B42B9F3BF6007B29A7 /* CHANGELOG.md */,
 			);
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
