@@ -140,6 +140,9 @@ open class TorManager: BridgesConfDelegate {
     private var smartGuard: DispatchSourceTimer?
     private var smartTimeout = DispatchTime.now()
 
+    private var progressObs: Any?
+    private var establishedObs: Any?
+
 
     /**
      Initialize the `TorManager` class.
@@ -272,15 +275,9 @@ open class TorManager: BridgesConfDelegate {
                         return completion(error)
                     }
 
-                    var progressObs: Any?
-                    var observer: Any?
-
                     if smartConnect {
                         self.startSmartGuard {
                             self.stopSmartGuard()
-
-                            self.torController?.removeObserver(observer)
-                            self.torController?.removeObserver(progressObs)
 
                             self.stop()
 
@@ -291,7 +288,7 @@ open class TorManager: BridgesConfDelegate {
                     if smartConnect || progressCallback != nil {
                         var oldProgress = -1
 
-                        progressObs = self.torController?.addObserver(forStatusEvents: {
+                        self.progressObs = self.torController?.addObserver(forStatusEvents: {
                             (type, severity, action, arguments) -> Bool in
 
                             if type == "STATUS_CLIENT" && action == "BOOTSTRAP" {
@@ -305,7 +302,7 @@ open class TorManager: BridgesConfDelegate {
                                 progressCallback?(progress)
 
                                 if progress >= 100 {
-                                    self.torController?.removeObserver(progressObs)
+                                    self.torController?.removeObserver(self.progressObs)
                                 }
 
                                 return true
@@ -315,14 +312,14 @@ open class TorManager: BridgesConfDelegate {
                         })
                     }
 
-                    observer = self.torController?.addObserver(forCircuitEstablished: { established in
+                    self.establishedObs = self.torController?.addObserver(forCircuitEstablished: { established in
                         guard established else {
                             return
                         }
 
                         self.stopSmartGuard()
-                        self.torController?.removeObserver(observer)
-                        self.torController?.removeObserver(progressObs)
+                        self.torController?.removeObserver(self.establishedObs)
+                        self.torController?.removeObserver(self.progressObs)
 
                         self.torController?.getInfoForKeys(["net/listeners/socks"], completion: { response in
                             guard let parts = response.first?.split(separator: ":"),
@@ -369,6 +366,9 @@ open class TorManager: BridgesConfDelegate {
      Stops Tor and any used Pluggable Transport.
      */
     open func stop() {
+        torController?.removeObserver(establishedObs)
+        torController?.removeObserver(progressObs)
+
         transport.stop()
 
         torController?.disconnect()
