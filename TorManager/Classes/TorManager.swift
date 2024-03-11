@@ -160,7 +160,9 @@ open class TorManager: BridgesConfDelegate {
     public init(directory: URL) {
         self.directory = directory
 
-        Settings.stateLocation = directory.appendingPathComponent("pt_state", isDirectory: true)
+        let ptDir = directory.appendingPathComponent("pt_state", isDirectory: true)
+        try? createSecureDirIfNotExists(at: ptDir)
+        Settings.stateLocation = ptDir
 
         IpSupport.shared.start({ [weak self] status in
             self?.ipStatus = status
@@ -547,9 +549,13 @@ open class TorManager: BridgesConfDelegate {
         conf.cookieAuthentication = true
         conf.autoControlPort = true
         conf.avoidDiskWrites = true
-        conf.dataDirectory = directory
         conf.geoipFile = Bundle.geoIp?.geoipFile
         conf.geoip6File = Bundle.geoIp?.geoip6File
+        conf.dataDirectory = directory
+
+        let authDir = directory.appendingPathComponent("auth", isDirectory: true)
+        try? createSecureDirIfNotExists(at: authDir)
+        conf.clientAuthDirectory = authDir
 
         conf.arguments += transport.torConf(Transport.asArguments).joined()
 
@@ -692,5 +698,17 @@ open class TorManager: BridgesConfDelegate {
             print("[\(String(describing: type(of: self)))] \(message)")
         }
     }
+
+    private func createSecureDirIfNotExists(at url: URL) throws {
+        // Try toemove it, if it is *not* a directory.
+        if url.exists && !url.isDirectory {
+            try FileManager.default.removeItem(at: url)
+        }
+
+        if !url.exists {
+            try FileManager.default.createDirectory(
+                at: url, withIntermediateDirectories: true,
+                attributes: [.posixPermissions: NSNumber(value: 0o700)])
+        }
     }
 }
