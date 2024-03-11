@@ -10,6 +10,7 @@ import Foundation
 import Tor
 import IPtProxyUI
 import Network
+import os
 
 #if os(iOS)
 import OrbotKit
@@ -39,6 +40,10 @@ open class TorManager: BridgesConfDelegate {
             }
         }
     }
+
+    @available(iOS 14.0, *)
+    private static let osLogger = Logger(subsystem: Bundle.main.bundleIdentifier!, 
+                                         category: String(describing: TorManager.self))
 
 
     public let directory: URL
@@ -114,7 +119,7 @@ open class TorManager: BridgesConfDelegate {
     public private(set) var torThread: TorThread?
 
     /**
-     The `TorConfiguration` currently in use.
+     The `TorConfiguration` which was used to start Tor.
      */
     public private(set) var torConf: TorConfiguration?
 
@@ -550,11 +555,16 @@ open class TorManager: BridgesConfDelegate {
 
         conf.arguments += ipStatus.torConf(transport, Transport.asArguments).joined()
 
-        conf.options = ["Log": "notice stdout",
-                        "LogMessageDomains": "1",
-                        "SafeLogging": "0",
+        conf.options = ["LogMessageDomains": "1",
+                        "SafeLogging": "1",
                         "SocksPort": "auto",
                         "UseBridges": transport == .none ? "0" : "1"]
+
+#if DEBUG
+        conf.options["Log"] = "notice stdout"
+#else
+        conf.options["Log"] = "err file /dev/null"
+#endif
 
         if let port = bypassPort {
             conf.options["Socks5Proxy"] = "127.0.0.1:\(port)"
@@ -675,6 +685,12 @@ open class TorManager: BridgesConfDelegate {
 
 
     private func log(_ message: String) {
-        print("[\(String(describing: type(of: self)))] \(message)")
+        if #available(iOS 14.0, *) {
+            Self.osLogger.log(level: .debug, "\(message, privacy: .public)")
+        } 
+        else {
+            print("[\(String(describing: type(of: self)))] \(message)")
+        }
+    }
     }
 }
