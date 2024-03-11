@@ -152,10 +152,10 @@ open class TorManager: BridgesConfDelegate {
      ```
      extension TorManager {
 
-     static let shared = TorManager(
-     directory: FileManager.default.urls(
-     for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("tor", isDirectory: true))
-     }
+        static let shared = TorManager(
+            directory: FileManager.default.urls(
+            for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("tor", isDirectory: true))
+    }
      ```
 
      - parameter directory: Working directory for Tor and Pluggable Transports.

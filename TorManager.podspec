@@ -22,6 +22,11 @@ This library bundles all building blocks to integrate Tor into your app:
   - Auto-configuration support via Moat/RdSys services
   - Auto-configuration support for IPv4/IPv6 cappable networks
 - OrbotKit to detect and interact with a running Orbot
+
+Plus
+- A "smart connect" algorithm to automatically step through the transports to
+  find a connection in hostile environments.
+- Provide correct `WKWebView` and `URLSession` proxy configurations.
                        DESC
 
   s.homepage         = 'https://github.com/tladesignz/TorManager'
