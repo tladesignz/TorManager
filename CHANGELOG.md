@@ -1,5 +1,11 @@
 # TorManager
 
+## 0.3.0
+
+- Fixed bug with smart connect.
+- Made `TorManager.Errors` public.
+- Added constant for the word "Tor".
+
 ## 0.2.0
 
 - Improved logging.
