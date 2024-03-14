@@ -18,6 +18,9 @@ import OrbotKit
 
 open class TorManager: BridgesConfDelegate {
 
+    public static let torName = "Tor"
+
+
     public enum Errors: LocalizedError {
         case orbotRunningNoBypass
         case cookieUnreadable
