@@ -276,6 +276,8 @@ open class TorManager: BridgesConfDelegate {
                     }
 
                     if smartConnect {
+                        self.connectionAlive()
+
                         self.startSmartGuard {
                             self.stopSmartGuard()
 
