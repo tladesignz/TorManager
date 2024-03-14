@@ -18,13 +18,13 @@ import OrbotKit
 
 open class TorManager: BridgesConfDelegate {
 
-    enum Errors: LocalizedError {
+    public enum Errors: LocalizedError {
         case orbotRunningNoBypass
         case cookieUnreadable
         case noSocksAddr
         case smartConnectFailed
 
-        var errorDescription: String? {
+        public var errorDescription: String? {
             switch self {
             case .orbotRunningNoBypass:
                 return "Orbot is running, but no bypass port provided by Orbot."
