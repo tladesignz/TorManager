@@ -68,7 +68,7 @@ open class TorManager: BridgesConfDelegate {
      SOCKS5 endpoint of the started Tor to use with ``WKWebViewConfiguration.websiteDataStore.proxyConfigurations``.
      */
     public var torSocks5Endpoint: NWEndpoint? {
-        guard let port = torSocks5Port else {
+        guard connected, let port = torSocks5Port else {
             return nil
         }
 
@@ -81,14 +81,14 @@ open class TorManager: BridgesConfDelegate {
             host = .loopback
         }
 
-        return .hostPort(host: NWEndpoint.Host.ipv4(host), port: port)
+        return .hostPort(host: .ipv4(host), port: port)
     }
 
     /**
      SOCKS5 proxy configuration of the started Tor to use with ``URLSessionConfiguration.connectionProxyDictionary``.
      */
     public var torSocks5ProxyConf: [AnyHashable: Any]? {
-        guard let port = torSocks5Port?.rawValue else {
+        guard connected, let port = torSocks5Port?.rawValue else {
             return nil
         }
 
@@ -371,6 +371,9 @@ open class TorManager: BridgesConfDelegate {
      Stops Tor and any used Pluggable Transport.
      */
     open func stop() {
+        torSocks5Host = nil
+        torSocks5Port = nil
+
         torController?.removeObserver(establishedObs)
         torController?.removeObserver(progressObs)
 
