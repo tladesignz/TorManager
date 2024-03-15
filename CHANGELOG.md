@@ -1,5 +1,9 @@
 # TorManager
 
+## 0.3.1
+
+- Make sure to not advertise any SOCKS5 access, if Tor is not running.
+
 ## 0.3.0
 
 - Fixed bug with smart connect.

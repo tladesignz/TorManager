@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TorManager'
-  s.version          = '0.3.0'
+  s.version          = '0.3.1'
   s.summary          = 'The easiest way to integrate Tor and Pluggable Transports into your app.'
 
   s.description      = <<-DESC
@@ -45,11 +45,6 @@ Plus
 
   s.source_files = 'TorManager/Classes/**/*'
   
-  # s.resource_bundles = {
-  #   'TorManager' => ['TorManager/Assets/*.png']
-  # }
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
   s.dependency 'Tor/GeoIP', '~> 408.10'
   s.dependency 'IPtProxyUI', '~> 4.3'
   s.ios.dependency 'OrbotKit', '~> 1.1'
