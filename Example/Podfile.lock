@@ -1,25 +1,25 @@
 PODS:
-  - Eureka (5.4.0)
-  - IPtProxy (3.4.0)
-  - IPtProxyUI (4.3.1):
+  - Eureka (5.5.0)
+  - IPtProxy (3.8.1)
+  - IPtProxyUI (4.6.1):
     - Eureka (~> 5.3)
-    - IPtProxy (~> 3.4.0)
-    - IPtProxyUI/App (= 4.3.1)
-  - IPtProxyUI/App (4.3.1):
+    - IPtProxy (~> 3.8.1)
+    - IPtProxyUI/App (= 4.6.1)
+  - IPtProxyUI/App (4.6.1):
     - Eureka (~> 5.3)
-    - IPtProxy (~> 3.4.0)
+    - IPtProxy (~> 3.8.1)
     - ProgressHUD (~> 14.1)
   - OrbotKit (1.1.0)
   - ProgressHUD (14.1.1)
-  - Tor/Core (408.10.1)
-  - Tor/CTor (408.10.1):
+  - Tor/Core (408.12.1)
+  - Tor/CTor (408.12.1):
     - Tor/Core
-  - Tor/GeoIP (408.10.1):
+  - Tor/GeoIP (408.12.1):
     - Tor/CTor
-  - TorManager (0.3.1):
-    - IPtProxyUI (~> 4.3)
+  - TorManager (0.3.2):
+    - IPtProxyUI (~> 4.6)
     - OrbotKit (~> 1.1)
-    - Tor/GeoIP (~> 408.10)
+    - Tor/GeoIP (~> 408.12)
 
 DEPENDENCIES:
   - TorManager (from `../`)
@@ -38,13 +38,13 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Eureka: fadaa9fa3d6e402d3c60f78f24edf3d7bafc9c29
-  IPtProxy: dfaa1f21006ca758f9966548f1869a8e29e7b72e
-  IPtProxyUI: 0e8ebcca4aa89812f1b16591e18732dc3c7aecd1
+  Eureka: 1c18c7fcd8f772cc2ca42d6be36292dffa77eecb
+  IPtProxy: d7e37d1faa9b2608b8b5b2743b1a4ae3eb723c5e
+  IPtProxyUI: b30db38039f283bdb92ef39c9911ffe64f0f4067
   OrbotKit: 5e69508dee1943144fefa18a197fbf2030dfbe36
   ProgressHUD: abb9136ae23c85204236828562cb9a8ec98efb44
-  Tor: 4aa4aee031f892efa43d1afb01c90565990c6312
-  TorManager: 807c0f9c70923faead3a4f5f3b921b0b4b498f17
+  Tor: 958cbe68eef90659339403e40e20d7610a9456dd
+  TorManager: 6fc235fa58955b5681a8e4a0d3f5721e8dcbf9a5
 
 PODFILE CHECKSUM: ede7eb67067cf00a6d7d0f27bf71ab47ebc6c925
 
