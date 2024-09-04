@@ -1,5 +1,10 @@
 # TorManager
 
+## 0.3.2
+
+- Updated dependencies.
+- Fixed issues with Objective-C/Swift data type interoperability.
+
 ## 0.3.1
 
 - Make sure to not advertise any SOCKS5 access, if Tor is not running.
