@@ -565,24 +565,27 @@ open class TorManager: BridgesConfDelegate {
         try? createSecureDirIfNotExists(at: authDir)
         conf.clientAuthDirectory = authDir
 
-        conf.arguments += transport.torConf(Transport.asArguments).joined()
+        var arguments = [String]()
+        arguments += transport.torConf(Transport.asArguments).joined()
+        arguments += ipStatus.torConf(transport, Transport.asArguments).joined()
+        conf.arguments.addObjects(from: arguments)
 
-        conf.arguments += ipStatus.torConf(transport, Transport.asArguments).joined()
-
-        conf.options = ["LogMessageDomains": "1",
-                        "SafeLogging": "1",
-                        "SocksPort": "auto",
-                        "UseBridges": transport == .none ? "0" : "1"]
+        var options = ["LogMessageDomains": "1",
+                       "SafeLogging": "1",
+                       "SocksPort": "auto",
+                       "UseBridges": transport == .none ? "0" : "1"]
 
 #if DEBUG
-        conf.options["Log"] = "notice stdout"
+        options["Log"] = "notice stdout"
 #else
-        conf.options["Log"] = "err file /dev/null"
+        options["Log"] = "err file /dev/null"
 #endif
 
         if let port = bypassPort {
-            conf.options["Socks5Proxy"] = "127.0.0.1:\(port)"
+            options["Socks5Proxy"] = "127.0.0.1:\(port)"
         }
+
+        conf.options.addEntries(from: options)
 
         return conf
     }
