@@ -230,7 +230,12 @@ open class TorManager: BridgesConfDelegate {
 
         // If Tor is already running, just reconfigure bridges.
         if connected {
-            reconfigureBridges()
+            do {
+                try reconfigureBridges()
+            }
+            catch {
+                return completion(error)
+            }
 
             return completion(nil)
         }
@@ -239,7 +244,14 @@ open class TorManager: BridgesConfDelegate {
         torSocks5Port = nil
 
         let block = {
-            self.transport.start()
+            do {
+                try self.transport.start()
+            }
+            catch {
+                self.stop()
+
+                return completion(error)
+            }
 
             // Create fresh - transport ports may have changed.
             self.torConf = self.createTorConf(orbot.bypassPort)
@@ -258,7 +270,7 @@ open class TorManager: BridgesConfDelegate {
                     do {
                         try self.torController?.connect()
                     }
-                    catch let error {
+                    catch {
                         self.stop()
 
                         return completion(error)
@@ -394,7 +406,7 @@ open class TorManager: BridgesConfDelegate {
 
      ATTENTION: If Tor is currently starting up, nothing will change.
      */
-    open func reconfigureBridges() {
+    open func reconfigureBridges() throws {
         guard connected, let torController = torController else {
             return // Nothing can be done. Will get configured on (next) start.
         }
@@ -415,23 +427,18 @@ open class TorManager: BridgesConfDelegate {
             group.wait()
         }
 
-        switch transport {
-        case .obfs4, .custom:
-            Transport.snowflake.stop()
-
-        case .snowflake, .snowflakeAmp:
-            Transport.obfs4.stop()
-
-        default:
-            Transport.obfs4.stop()
-            Transport.snowflake.stop()
-        }
+        // First, stop all transports.
+        Transport.obfs4.stop()
+        Transport.custom.stop()
+        Transport.meekAzure.stop()
+        Transport.snowflake.stop()
 
         guard transport != .none else {
             return
         }
 
-        transport.start()
+        // Then start the needed one again.
+        try transport.start()
 
         var conf = transport.torConf(Transport.asConf)
         conf.append(Transport.asConf(key: "UseBridges", value: "1"))
@@ -612,37 +619,46 @@ open class TorManager: BridgesConfDelegate {
 
             self.connectionAlive()
 
-            switch self.transport {
+            var working = false
 
-            // If direct connection didn't work, try Snowflake bridge.
-            case .none:
-                self.transport = .snowflake
+            repeat {
+                switch self.transport {
 
-                self.transport.start()
+                // If direct connection didn't work, try Snowflake bridge.
+                case .none:
+                    self.transport = .snowflake
 
-            // If Snowflake didn't work, try custom or default Obfs4 bridges.
-            case .snowflake, .snowflakeAmp:
-                self.transport.stop()
+                // If Snowflake didn't work, try custom or default Obfs4 bridges.
+                case .snowflake, .snowflakeAmp:
+                    self.transport.stop()
 
-                if !(self.customBridges?.isEmpty ?? true) {
-                    self.transport = .custom
-                }
-                else {
+                    if !(self.customBridges?.isEmpty ?? true) {
+                        self.transport = .custom
+                    }
+                    else {
+                        self.transport = .obfs4
+                    }
+
+                // If custom Obfs4 bridges didn't work, try default ones.
+                case .custom:
+                    self.transport.stop()
+
                     self.transport = .obfs4
+
+                // If Obfs4 bridges didn't work, give up.
+                default:
+                    return giveUp()
                 }
 
-                self.transport.start()
-
-            // If custom Obfs4 bridges didn't work, try default ones.
-            case .custom:
-                self.transport = .obfs4
-
-            // If Obfs4 bridges didn't work, give up.
-            default:
-                return giveUp()
+                do {
+                    try self.reconfigureBridges()
+                    working = true
+                }
+                catch {
+                    self.log(error.localizedDescription)
+                }
             }
-
-            self.reconfigureBridges()
+            while !working
         }
 
         smartGuard?.resume()

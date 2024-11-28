@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TorManager'
-  s.version          = '0.3.2'
+  s.version          = '0.4.0'
   s.summary          = 'The easiest way to integrate Tor and Pluggable Transports into your app.'
 
   s.description      = <<-DESC
@@ -33,7 +33,7 @@ Plus
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Benjamin Erhart' => 'berhart@netzarchitekten.com' }
   s.source           = { :git => 'https://github.com/tladesignz/TorManager.git', :tag => s.version.to_s }
-  s.social_media_url = 'https://twitter.com/tladesignz'
+  s.social_media_url = 'https://chaos.social/@tla'
 
   s.ios.deployment_target = '13.0'
   s.osx.deployment_target = '11'
@@ -45,8 +45,8 @@ Plus
 
   s.source_files = 'TorManager/Classes/**/*'
   
-  s.dependency 'Tor/GeoIP', '~> 408.12'
-  s.dependency 'IPtProxyUI', '~> 4.6'
+  s.dependency 'Tor/GeoIP', '~> 408.13'
+  s.dependency 'IPtProxyUI', '~> 4.7'
   s.ios.dependency 'OrbotKit', '~> 1.1'
 
 end
