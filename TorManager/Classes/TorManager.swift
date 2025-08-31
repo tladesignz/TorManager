@@ -430,7 +430,7 @@ open class TorManager: BridgesConfDelegate {
         // First, stop all transports.
         Transport.obfs4.stop()
         Transport.custom.stop()
-        Transport.meekAzure.stop()
+        Transport.meek.stop()
         Transport.snowflake.stop()
 
         guard transport != .none else {
