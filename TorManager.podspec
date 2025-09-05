@@ -45,8 +45,8 @@ Plus
 
   s.source_files = 'TorManager/Classes/**/*'
   
-  s.dependency 'Tor/GeoIP', '~> 408.13'
-  s.dependency 'IPtProxyUI', '~> 4.7'
+  s.dependency 'Tor/GeoIP', '~> 408.17'
+  s.dependency 'IPtProxyUI', '~> 4.9'
   s.ios.dependency 'OrbotKit', '~> 1.1'
 
 end
