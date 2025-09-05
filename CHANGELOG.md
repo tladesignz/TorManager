@@ -1,5 +1,8 @@
 # TorManager
 
+## 0.5.0
+- Updated dependencies.
+
 ## 0.4.0
 - Updated dependencies.
 

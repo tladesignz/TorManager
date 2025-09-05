@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'TorManager'
-  s.version          = '0.4.0'
+  s.version          = '0.5.0'
   s.summary          = 'The easiest way to integrate Tor and Pluggable Transports into your app.'
 
   s.description      = <<-DESC
