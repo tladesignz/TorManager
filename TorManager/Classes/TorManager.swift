@@ -428,16 +428,13 @@ open class TorManager: BridgesConfDelegate {
         }
 
         // First, stop all transports.
-        Transport.obfs4.stop()
-        Transport.custom.stop()
-        Transport.meek.stop()
-        Transport.snowflake.stop()
+        transport.stopAllOthers()
 
         guard transport != .none else {
             return
         }
 
-        // Then start the needed one again.
+        // Then start the needed one, if not started, yet.
         try transport.start()
 
         var conf = transport.torConf(Transport.asConf)
