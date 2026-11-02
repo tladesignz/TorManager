@@ -35,8 +35,8 @@ Plus
   s.source           = { :git => 'https://github.com/tladesignz/TorManager.git', :tag => s.version.to_s }
   s.social_media_url = 'https://chaos.social/@tla'
 
-  s.ios.deployment_target = '13.0'
-  s.osx.deployment_target = '11'
+  s.ios.deployment_target = '15.0'
+  s.osx.deployment_target = '12'
 
   # Needed because of the IPtProxy go-mobile library.
   s.static_framework = true
