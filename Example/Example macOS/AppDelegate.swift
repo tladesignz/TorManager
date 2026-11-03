@@ -13,36 +13,32 @@ import TorManager
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        TorManager.shared.start { error in
-            print("[\(String(describing: type(of: self)))] error=\(error?.localizedDescription ?? "(nil)")")
+        Task {
+            do {
+                try await TorManager.shared.start(autoConf: true, smartConnect: true) { progress in
+                    print("progress=\(progress)")
+                }
+            }
+            catch {
+                print(error)
+            }
 
             let config = URLSessionConfiguration.default
             config.connectionProxyDictionary = TorManager.shared.torSocks5ProxyConf
 
             let session = URLSession(configuration: config)
 
-            let request = URLRequest(url: URL(string: "https://check.torproject.org")!)
+            do {
+                let (data, response) = try await session.data(from: URL(string: "https://check.torproject.org")!)
 
-            print(request)
+                print(response)
 
-            session.dataTask(with: request) { data, response, error in
-                if let response = response {
-                    print(response)
-                }
-
-                if let error = error {
-                    print(error)
-                }
-
-                if let data = data {
-                    print(String(data: data, encoding: .utf8) ?? "(nil)")
-                }
-            }.resume()
+                print(String(data: data, encoding: .utf8) ?? "(nil)")
+            }
+            catch {
+                print(error)
+            }
         }
-    }
-
-    func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
     }
 
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {

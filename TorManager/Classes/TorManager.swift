@@ -44,8 +44,8 @@ open class TorManager: BridgesConfDelegate {
         }
     }
 
-    @available(iOS 14.0, *)
-    private static let osLogger = Logger(subsystem: Bundle.main.bundleIdentifier!, 
+
+    private static let osLogger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                                          category: String(describing: TorManager.self))
 
 
@@ -140,6 +140,7 @@ open class TorManager: BridgesConfDelegate {
      */
     public private(set) var ipStatus = IpSupport.Status.unavailable
 
+
     private var smartGuard: DispatchSourceTimer?
     private var smartTimeout = DispatchTime.now()
 
@@ -170,21 +171,24 @@ open class TorManager: BridgesConfDelegate {
         try? createSecureDirIfNotExists(at: ptDir)
         Settings.stateLocation = ptDir
 
-        IpSupport.shared.start({ [weak self] status in
-            self?.ipStatus = status
-
-            if self?.connected ?? false {
-                self?.torController?.setConfs(status.torConf(self!.transport, Transport.asConf))
-                { success, error in
-                    if let error = error {
-                        self?.log(error.localizedDescription)
-                    }
-
-                    self?.torController?.resetConnection()
+        Task {
+            ipStatus = await withCheckedContinuation { continuation in
+                IpSupport.shared.start { status in
+                    continuation.resume(returning: status)
                 }
             }
-        })
 
+            if connected {
+                do {
+                    try await torController?.setConfs(ipStatus.torConf(transport, Transport.asConf))
+                }
+                catch {
+                    log(error.localizedDescription)
+                }
+
+                await torController?.resetConnection()
+            }
+        }
     }
 
 
@@ -215,43 +219,44 @@ open class TorManager: BridgesConfDelegate {
      - parameter smartConnect: Automatically tries a cascade of Pluggable Transports, if no progress for 30 seconds, each.
      - parameter progressCallback: Will be called, in case Tor needs to start up and will be informed about that progress.
      - parameter progress: Value between 0 and 100.
-     - parameter completion: Callback, when everything is ready.
-     - parameter error: Reason, why Tor could not be started/no Tor SOCKS5 endpoint could be established.
+     - throws: Reason, why Tor could not be started/no Tor SOCKS5 endpoint could be established.
      */
-    open func start(autoConf: Bool = false, smartConnect: Bool = false, 
-                    _ progressCallback: ((_ progress: Int) -> Void)? = nil,
-                    _ completion: @escaping (_ error: Error?) -> Void)
+    open func start(autoConf: Bool = false, smartConnect: Bool = false,
+                    _ progressCallback: ((_ progress: Int) -> Void)? = nil) async throws
     {
-        let orbot = evaluateOrbot()
+        let orbot = await evaluateOrbot()
 
         if orbot.running && orbot.bypassPort == nil {
-            return completion(Errors.orbotRunningNoBypass)
+            throw Errors.orbotRunningNoBypass
         }
 
         // If Tor is already running, just reconfigure bridges.
         if connected {
-            do {
-                try reconfigureBridges()
-            }
-            catch {
-                return completion(error)
-            }
+            try await reconfigureBridges()
 
-            return completion(nil)
+            return
         }
 
         torSocks5Host = nil
         torSocks5Port = nil
 
-        let block = {
+        if autoConf {
             do {
-                try self.transport.start()
+                try await AutoConf(self).do()
             }
             catch {
-                self.stop()
+                self.log("auto-conf error=\(error)")
 
-                return completion(error)
+                // If the API is broken, we continue with our own smart connect logic,
+                // if that is requested, else we leave this setting alone.
+                if smartConnect {
+                    self.transport = .none
+                }
             }
+        }
+
+        do {
+            try self.transport.start()
 
             // Create fresh - transport ports may have changed.
             self.torConf = self.createTorConf(orbot.bypassPort)
@@ -261,121 +266,95 @@ open class TorManager: BridgesConfDelegate {
             self.torThread = TorThread(configuration: self.torConf)
             self.torThread?.start()
 
-            DispatchQueue.global(qos: .userInitiated).asyncAfter(deadline: .now() + 0.65) {
-                if self.torController == nil, let cpf = self.torConf?.controlPortFile {
-                    self.torController = TorController(controlPortFile: cpf)
+            try await Task.sleep(nanoseconds: UInt64(0.65 * Double(NSEC_PER_SEC)))
+
+            if self.torController == nil, let cpf = self.torConf?.controlPortFile {
+                self.torController = TorController(controlPortFile: cpf)
+            }
+
+            if !(self.torController?.isConnected ?? false) {
+                try self.torController?.connect()
+            }
+
+            guard let cookie = self.torConf?.cookie else {
+                throw Errors.cookieUnreadable
+            }
+
+            try await self.torController?.authenticate(with: cookie)
+
+            var smartConnectFailed = false
+
+            if smartConnect {
+                self.connectionAlive()
+
+                self.startSmartGuard {
+                    smartConnectFailed = true
                 }
+            }
 
-                if !(self.torController?.isConnected ?? false) {
-                    do {
-                        try self.torController?.connect()
-                    }
-                    catch {
-                        self.stop()
+            if smartConnect || progressCallback != nil {
+                var oldProgress = -1
 
-                        return completion(error)
-                    }
-                }
+                self.progressObs = self.torController?.addObserver(forStatusEvents: {
+                    (type, severity, action, arguments) -> Bool in
 
-                guard let cookie = self.torConf?.cookie else {
-                    self.stop()
-
-                    return completion(Errors.cookieUnreadable)
-                }
-
-                self.torController?.authenticate(with: cookie) { success, error in
-                    if let error = error {
-                        self.stop()
-
-                        return completion(error)
+                    guard type == "STATUS_CLIENT" && action == "BOOTSTRAP" else {
+                        return false
                     }
 
-                    if smartConnect {
+                    let progress = Int(arguments?["PROGRESS"] ?? "0") ?? 0
+
+                    if progress > oldProgress {
                         self.connectionAlive()
-
-                        self.startSmartGuard {
-                            self.stopSmartGuard()
-
-                            self.stop()
-
-                            completion(Errors.smartConnectFailed)
-                        }
+                        oldProgress = progress
                     }
 
-                    if smartConnect || progressCallback != nil {
-                        var oldProgress = -1
+                    progressCallback?(progress)
 
-                        self.progressObs = self.torController?.addObserver(forStatusEvents: {
-                            (type, severity, action, arguments) -> Bool in
-
-                            if type == "STATUS_CLIENT" && action == "BOOTSTRAP" {
-                                let progress = Int(arguments?["PROGRESS"] ?? "0") ?? 0
-
-                                if progress > oldProgress {
-                                    self.connectionAlive()
-                                    oldProgress = progress
-                                }
-
-                                progressCallback?(progress)
-
-                                if progress >= 100 {
-                                    self.torController?.removeObserver(self.progressObs)
-                                }
-
-                                return true
-                            }
-
-                            return false
-                        })
-                    }
-
-                    self.establishedObs = self.torController?.addObserver(forCircuitEstablished: { established in
-                        guard established else {
-                            return
-                        }
-
-                        self.stopSmartGuard()
-                        self.torController?.removeObserver(self.establishedObs)
+                    if progress >= 100 {
                         self.torController?.removeObserver(self.progressObs)
-
-                        self.torController?.getInfoForKeys(["net/listeners/socks"], completion: { response in
-                            guard let parts = response.first?.split(separator: ":"),
-                                  let host = parts.first,
-                                  let port = parts.last,
-                                  let port = NWEndpoint.Port(String(port))
-                            else {
-                                self.stop()
-
-                                return completion(Errors.noSocksAddr)
-                            }
-
-                            self.torSocks5Host = String(host)
-                            self.torSocks5Port = port
-
-                            completion(nil)
-                        })
-                    })
-                }
-            }
-        }
-
-        if autoConf {
-            AutoConf(self).do { error in
-                if let error = error {
-                    self.log("auto-conf error=\(error)")
-
-                    // If the API is broken, we continue with our own smart connect logic,
-                    // if that is requested, else we leave this setting alone.
-                    if smartConnect {
-                        self.transport = .none
                     }
-                }
 
-                block()
+                    return true
+                })
             }
+
+            let _: Bool = try await withCheckedThrowingContinuation { continuation in
+                self.establishedObs = self.torController?.addObserver(forCircuitEstablished: { established in
+                    if smartConnectFailed {
+                        return continuation.resume(throwing: Errors.smartConnectFailed)
+                    }
+
+                    guard established else {
+                        return
+                    }
+
+                    continuation.resume(returning: true)
+                })
+            }
+
+            self.stopSmartGuard()
+            self.torController?.removeObserver(self.establishedObs)
+            self.torController?.removeObserver(self.progressObs)
+
+            let response = await self.torController?.info(forKeys: ["net/listeners/socks"])
+
+            guard let parts = response?.first?.split(separator: ":"),
+                  let host = parts.first,
+                  let port = parts.last,
+                  let port = NWEndpoint.Port(String(port))
+            else {
+                throw Errors.noSocksAddr
+            }
+
+            self.torSocks5Host = String(host)
+            self.torSocks5Port = port
         }
-        else {
-            block()
+        catch {
+            self.stopSmartGuard()
+            self.stop()
+
+            throw error
         }
     }
 
@@ -406,25 +385,18 @@ open class TorManager: BridgesConfDelegate {
 
      ATTENTION: If Tor is currently starting up, nothing will change.
      */
-    open func reconfigureBridges() throws {
-        guard connected, let torController = torController else {
+    open func reconfigureBridges() async throws {
+        guard connected, let torController else {
             return // Nothing can be done. Will get configured on (next) start.
         }
 
-        let group = DispatchGroup()
-
         for key in ["UseBridges", "ClientTransportPlugin", "Bridge"] {
-            group.enter()
-
-            torController.resetConf(forKey: key) { [weak self] _, error in
-                if let error = error {
-                    self?.log(error.localizedDescription)
-                }
-
-                group.leave()
+            do {
+                try await torController.resetConf(forKey: key)
             }
-
-            group.wait()
+            catch {
+                log(error.localizedDescription)
+            }
         }
 
         // First, stop all transports.
@@ -442,7 +414,7 @@ open class TorManager: BridgesConfDelegate {
 
 //        log(conf.debugDescription)
 
-        torController.setConfs(conf)
+        try await torController.setConfs(conf)
     }
 
     /**
@@ -450,14 +422,14 @@ open class TorManager: BridgesConfDelegate {
 
      - note: There's no clear way to determine, which circuit actually was used by a specific request.
 
-     - parameter completion: The callback upon completion of the task. Will return A list of `TORCircuit`s . Empty if no circuit could be found or if ``TorManager.connected`` is `false`.
+     - returns: A list of `TORCircuit`s . Empty if no circuit could be found or if ``TorManager.connected`` is `false`.
      */
-    open func getCircuits(_ completion: @escaping ([TorCircuit]) -> Void) {
-        guard connected else {
-            return completion([])
+    open func getCircuits() async -> [TorCircuit] {
+        guard connected, let torController else {
+            return []
         }
 
-        torController?.getCircuits(completion)
+        return await torController.circuits()
     }
 
     /**
@@ -466,16 +438,14 @@ open class TorManager: BridgesConfDelegate {
      The given circuits are invalid afterwards, as you just closed them. You should throw them away on completion.
 
      - parameter circuits: List of circuits to close.
-     - parameter completion  Completion callback. Will return `true`, if *all* closings were successful, `false`, if *at least one* closing failed or if ``TorManager.connected`` is `false`.
+     - returns: `true`, if *all* closings were successful, `false`, if *at least one* closing failed or if ``TorManager.connected`` is `false`.
     */
-    open func close(_ circuits: [TorCircuit], _ completion: ((Bool) -> Void)?) {
-        guard connected else {
-            completion?(false)
-
-            return
+    open func close(_ circuits: [TorCircuit]) async -> Bool {
+        guard connected, let torController else {
+            return false
         }
 
-        torController?.close(circuits, completion: completion)
+        return await torController.close(circuits)
     }
 
     /**
@@ -496,7 +466,7 @@ open class TorManager: BridgesConfDelegate {
 
      - returns: Tuple with `running` flag indicating if Orbot is running, and `bypassPort`, indicating the port on localhost to bypass Orbot.
      */
-    open func evaluateOrbot() -> (running: Bool, bypassPort: UInt16?) {
+    open func evaluateOrbot() async -> (running: Bool, bypassPort: UInt16?) {
         var running = false
         var bypassPort: UInt16? = nil
 
@@ -505,10 +475,19 @@ open class TorManager: BridgesConfDelegate {
             return (running, bypassPort)
         }
 
-        let group = DispatchGroup()
-        group.enter()
+        let info: OrbotKit.Info?
 
-        OrbotKit.shared.info { info, error in
+        do {
+            info = try await withCheckedThrowingContinuation { continuation in
+                OrbotKit.shared.info { info, error in
+                    if let error {
+                        return continuation.resume(throwing: error)
+                    }
+
+                    continuation.resume(returning: info)
+                }
+            }
+
             switch info?.status {
             case .starting, .started:
                 running = true
@@ -519,21 +498,18 @@ open class TorManager: BridgesConfDelegate {
                 running = false
             }
 
+            bypassPort = info?.bypassPort
+        }
+        catch {
             // We don't necessarily bother with an API token.
             // If something is installed which registered the `orbot` scheme
             // and something listens on the correct port, speaks HTTP and
             // answers with 403, than we have enough evidence, that
             // Orbot is running.
-            if let error = error, case OrbotKit.Errors.httpError(statusCode: 403) = error {
+            if case OrbotKit.Errors.httpError(statusCode: 403) = error {
                 running = true
             }
-
-            bypassPort = info?.bypassPort
-
-            group.leave()
         }
-
-        _ = group.wait(timeout: .now() + 0.5)
 #endif
 
         return (running, bypassPort)
@@ -616,46 +592,48 @@ open class TorManager: BridgesConfDelegate {
 
             self.connectionAlive()
 
-            var working = false
+            Task {
+                var working = false
 
-            repeat {
-                switch self.transport {
+                repeat {
+                    switch self.transport {
 
-                // If direct connection didn't work, try Snowflake bridge.
-                case .none:
-                    self.transport = .snowflake
+                        // If direct connection didn't work, try Snowflake bridge.
+                    case .none:
+                        self.transport = .snowflake
 
-                // If Snowflake didn't work, try custom or default Obfs4 bridges.
-                case .snowflake, .snowflakeAmp:
-                    self.transport.stop()
+                        // If Snowflake didn't work, try custom or default Obfs4 bridges.
+                    case .snowflake, .snowflakeAmp:
+                        self.transport.stop()
 
-                    if !(self.customBridges?.isEmpty ?? true) {
-                        self.transport = .custom
-                    }
-                    else {
+                        if !(self.customBridges?.isEmpty ?? true) {
+                            self.transport = .custom
+                        }
+                        else {
+                            self.transport = .obfs4
+                        }
+
+                        // If custom Obfs4 bridges didn't work, try default ones.
+                    case .custom:
+                        self.transport.stop()
+
                         self.transport = .obfs4
+
+                        // If Obfs4 bridges didn't work, give up.
+                    default:
+                        return giveUp()
                     }
 
-                // If custom Obfs4 bridges didn't work, try default ones.
-                case .custom:
-                    self.transport.stop()
-
-                    self.transport = .obfs4
-
-                // If Obfs4 bridges didn't work, give up.
-                default:
-                    return giveUp()
+                    do {
+                        try await self.reconfigureBridges()
+                        working = true
+                    }
+                    catch {
+                        self.log(error.localizedDescription)
+                    }
                 }
-
-                do {
-                    try self.reconfigureBridges()
-                    working = true
-                }
-                catch {
-                    self.log(error.localizedDescription)
-                }
+                while !working
             }
-            while !working
         }
 
         smartGuard?.resume()
@@ -688,6 +666,15 @@ open class TorManager: BridgesConfDelegate {
 
     // MARK: BridgesConfDelegate
 
+    public var countryCode: String? {
+        get {
+            Settings.countryCode
+        }
+        set {
+            Settings.countryCode = newValue
+        }
+    }
+
     public var transport: IPtProxyUI.Transport {
         get {
             Settings.transport
@@ -715,12 +702,7 @@ open class TorManager: BridgesConfDelegate {
 
 
     private func log(_ message: String) {
-        if #available(iOS 14.0, *) {
-            Self.osLogger.log(level: .debug, "\(message, privacy: .public)")
-        } 
-        else {
-            print("[\(String(describing: type(of: self)))] \(message)")
-        }
+        Self.osLogger.log(level: .debug, "\(message, privacy: .public)")
     }
 
     private func createSecureDirIfNotExists(at url: URL) throws {
