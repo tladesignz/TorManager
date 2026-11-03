@@ -16,7 +16,7 @@ PODS:
     - Tor/Core
   - Tor/GeoIP (409.15.1):
     - Tor/CTor
-  - TorManager (0.5.0):
+  - TorManager (1.0.0):
     - IPtProxyUI (~> 5.5)
     - OrbotKit (~> 1.2)
     - Tor/GeoIP (~> 409.15)
@@ -44,7 +44,7 @@ SPEC CHECKSUMS:
   OrbotKit: e932cc741c18e9a39242ae1c61eea6d54e54bd87
   ProgressHUD: abb9136ae23c85204236828562cb9a8ec98efb44
   Tor: c00b0762a961bf883941659a3e1e83fbea1cd568
-  TorManager: 770590dc432370021fd381bea40a5a14efd8e42f
+  TorManager: 0960c774c42288d0e3adb1aec4c1eb3c1a9edecb
 
 PODFILE CHECKSUM: fd42f29d77328ac3d4974039c5bc1db9323eb767
 

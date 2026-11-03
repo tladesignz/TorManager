@@ -37,8 +37,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
-        TorManager.shared.start { error in
-            print("[\(String(describing: type(of: self)))] error=\(error?.localizedDescription ?? "(nil)")")
+        Task {
+            do {
+                try await TorManager.shared.start()
+            }
+            catch {
+                print("[\(String(describing: type(of: self)))] error=\(error?.localizedDescription ?? "(nil)")")
+            }
         }
 
         return true
@@ -82,12 +87,6 @@ To configure a `URLSession`:
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
 ## Requirements
-
-C-Tor will be compiled on your machine, hence you need to have the necessary dependencies available:
-
-```sh
-brew install automake autoconf libtool gettext
-```
 
 For more details, see the [Tor.framework README](https://github.com/iCepa/Tor.framework/blob/pure_pod/README.md)
 

@@ -1,5 +1,10 @@
 # TorManager
 
+## 1.0.0
+- Updated dependencies.
+- Changed API so it is fully async/await compatible.
+- Last CocoaPods release.
+
 ## 0.5.0
 - Updated dependencies.
 
