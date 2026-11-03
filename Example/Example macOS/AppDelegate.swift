@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import TorManager
+import TorManager_macOS
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {

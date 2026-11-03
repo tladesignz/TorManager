@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import TorManager
+import TorManager_iOS
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

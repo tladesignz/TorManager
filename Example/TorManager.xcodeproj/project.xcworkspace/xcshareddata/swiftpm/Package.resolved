@@ -1,0 +1,60 @@
+{
+  "originHash" : "d6e654e6c9615196b9a00b5c93c7977ec5d0b84fede43d4a32231c640edf50cd",
+  "pins" : [
+    {
+      "identity" : "eureka",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/xmartlabs/eureka.git",
+      "state" : {
+        "revision" : "028ef8e3191a256b8f6b8bb6b9496efcb0762dbc",
+        "version" : "5.5.0"
+      }
+    },
+    {
+      "identity" : "iptproxy",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tladesignz/IPtProxy.git",
+      "state" : {
+        "revision" : "46552b8422a200e3e69aa3686b6278be945138a5",
+        "version" : "5.7.0"
+      }
+    },
+    {
+      "identity" : "iptproxyui-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tladesignz/IPtProxyUI-ios",
+      "state" : {
+        "revision" : "85c21e90a5457cfd6ca87a34a154e38843cef4e3",
+        "version" : "6.0.0"
+      }
+    },
+    {
+      "identity" : "orbotkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/guardianproject/orbotkit",
+      "state" : {
+        "revision" : "82838e4e36c70a08189feca0a9b3ef160ea19330",
+        "version" : "2.0.0"
+      }
+    },
+    {
+      "identity" : "progresshud",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/relatedcode/ProgressHUD.git",
+      "state" : {
+        "revision" : "2ebecc236508c6d325a36aeeadfc8930dccd07f6",
+        "version" : "14.1.5"
+      }
+    },
+    {
+      "identity" : "tor.framework",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/iCepa/Tor.framework.git",
+      "state" : {
+        "revision" : "c9c4dc20898ea9329a8ba4067aa2ea7c05de3860",
+        "version" : "409.15.3"
+      }
+    }
+  ],
+  "version" : 3
+}

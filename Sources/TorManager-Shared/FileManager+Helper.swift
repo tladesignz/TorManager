@@ -23,3 +23,19 @@ public extension URL {
         (try? resourceValues(forKeys: [.isDirectoryKey]).isDirectory) ?? false
     }
 }
+
+public extension FileManager {
+
+    func createSecureDirIfNotExists(at url: URL) throws {
+        // Try toemove it, if it is *not* a directory.
+        if url.exists && !url.isDirectory {
+            try removeItem(at: url)
+        }
+
+        if !url.exists {
+            try createDirectory(
+                at: url, withIntermediateDirectories: true,
+                attributes: [.posixPermissions: NSNumber(value: 0o700)])
+        }
+    }
+}
