@@ -152,7 +152,7 @@ open class TorManagerBase {
      - throws: Reason, why Tor could not be started/no Tor SOCKS5 endpoint could be established.
      */
     open func start(autoConf: Bool = false, smartConnect: Bool = false,
-                    _ progressCallback: ((_ progress: Int) -> Void)? = nil) async throws
+                    _ progressCallback: ((_ progress: Int, _ summary: String?) -> Void)? = nil) async throws
     {
         let orbot = await evaluateOrbot()
 
@@ -232,7 +232,7 @@ open class TorManagerBase {
                         oldProgress = progress
                     }
 
-                    progressCallback?(progress)
+                    progressCallback?(progress, arguments?["SUMMARY"])
 
                     if progress >= 100 {
                         self.torController?.removeObserver(self.progressObs)
