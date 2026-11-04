@@ -6,7 +6,8 @@ let package = Package(
     platforms: [.iOS(.v15), .macOS(.v12)],
     products: [
         .library(name: "TorManager-iOS", targets: ["TorManager-iOS"]),
-        .library(name: "TorManager-macOS", targets: ["TorManager-macOS"])
+        .library(name: "TorManager-iOS-UI", targets: ["TorManager-iOS-UI"]),
+        .library(name: "TorManager-macOS", targets: ["TorManager-macOS"]),
     ],
     dependencies: [
         .package(url: "https://github.com/tladesignz/IPtProxyUI-ios.git", from: "6.0.0"),
@@ -28,6 +29,13 @@ let package = Package(
                 .product(name: "IPtProxyUI-iOS-AppEx", package: "iptproxyui-ios"),
                 .product(name: "OrbotKit", package: "orbotkit"),
             ],
+        ),
+        .target(
+            name: "TorManager-iOS-UI",
+            dependencies: [
+                "TorManager-iOS",
+                .product(name: "IPtProxyUI-iOS", package: "iptproxyui-ios"),
+            ]
         ),
         .target(
             name: "TorManager-macOS",
