@@ -8,41 +8,70 @@
 
 import Cocoa
 import TorManager_macOS
+import IPtProxyUI_macOS
 
 @main
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         Task {
+            let fullAuto = Settings.transport == .none
+
             do {
-                try await TorManager.shared.start(autoConf: true, smartConnect: true) { progress in
-                    print("progress=\(progress)")
+                try await TorManager.shared.start(autoConf: fullAuto, smartConnect: fullAuto) { progress, summary in
+                    print("progress=\(progress), summary=\(summary ?? "(nil)")")
                 }
             }
             catch {
                 print(error)
             }
 
-            let config = URLSessionConfiguration.default
-            config.connectionProxyDictionary = TorManager.shared.torSocks5ProxyConf
+            NotificationCenter.default.post(name: .init("tor-ready"), object: nil)
 
-            let session = URLSession(configuration: config)
-
-            do {
-                let (data, response) = try await session.data(from: URL(string: "https://check.torproject.org")!)
-
-                print(response)
-
-                print(String(data: data, encoding: .utf8) ?? "(nil)")
-            }
-            catch {
-                print(error)
-            }
+//            let config = URLSessionConfiguration.default
+//            config.connectionProxyDictionary = TorManager.shared.torSocks5ProxyConf
+//
+//            let session = URLSession(configuration: config)
+//
+//            do {
+//                let (data, response) = try await session.data(from: URL(string: "https://check.torproject.org")!)
+//
+//                print(response)
+//
+//                print(String(data: data, encoding: .utf8) ?? "(nil)")
+//            }
+//            catch {
+//                print(error)
+//            }
         }
     }
 
     func applicationSupportsSecureRestorableState(_ app: NSApplication) -> Bool {
         return true
+    }
+
+    @IBAction
+    func openSettings(_ sender: Any) {
+        let vc = BridgesConfViewController()
+        vc.countryCode = TorManager.shared.countryCode
+        vc.transport = TorManager.shared.transport
+        vc.customBridges = TorManager.shared.customBridges
+        vc.delegate = TorManager.shared
+
+        let window = NSWindow(contentViewController: vc)
+        window.delegate = self
+        window.styleMask.remove(.miniaturizable)
+
+        NSApp.runModal(for: window)
+
+        window.close()
+    }
+
+
+    // MARK: NSWindowDelegate
+
+    public func windowWillClose(_ notification: Notification) {
+        NSApp.stopModal()
     }
 }
 
