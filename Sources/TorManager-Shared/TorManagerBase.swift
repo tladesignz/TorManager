@@ -214,6 +214,10 @@ open class TorManagerBase {
             if smartConnect || progressCallback != nil {
                 var oldProgress = -1
 
+                // Clean up old observer, in case somebody manages to reach this point a second time during startup.
+                self.torController?.removeObserver(self.progressObs)
+                self.progressObs = nil
+
                 self.progressObs = self.torController?.addObserver(forStatusEvents: {
                     (type, severity, action, arguments) -> Bool in
 
@@ -238,6 +242,10 @@ open class TorManagerBase {
                 })
             }
 
+            // Clean up old observer, in case somebody manages to reach this point a second time during startup.
+            self.torController?.removeObserver(self.establishedObs)
+            self.establishedObs = nil
+
             let _: Bool = try await withCheckedThrowingContinuation { continuation in
                 self.establishedObs = self.torController?.addObserver(forCircuitEstablished: { established in
                     if smartConnectFailed {
@@ -254,7 +262,9 @@ open class TorManagerBase {
 
             self.stopSmartGuard()
             self.torController?.removeObserver(self.establishedObs)
+            self.establishedObs = nil
             self.torController?.removeObserver(self.progressObs)
+            self.progressObs = nil
 
             let response = await self.torController?.info(forKeys: ["net/listeners/socks"])
 
@@ -285,7 +295,9 @@ open class TorManagerBase {
         torSocks5Port = nil
 
         torController?.removeObserver(establishedObs)
+        establishedObs = nil
         torController?.removeObserver(progressObs)
+        progressObs = nil
 
         stopTransport()
 
