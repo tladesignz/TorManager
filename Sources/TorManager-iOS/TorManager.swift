@@ -288,6 +288,13 @@ open class TorManager: TorManagerBase, BridgesConfDelegate {
     }
 
     public func save() {
-        // Nothing to do here.
+        Task {
+            do {
+                try await self.reconfigureBridges()
+            }
+            catch {
+                log("Error while saving bridge configuration and trying to reconfigure bridges: \(error)")
+            }
+        }
     }
 }
