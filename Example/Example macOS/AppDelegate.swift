@@ -3,7 +3,7 @@
 //  Example macOS
 //
 //  Created by Benjamin Erhart on 08.03.24.
-//  Copyright © 2024 CocoaPods. All rights reserved.
+//  Copyright © 2026 Guardian Project. All rights reserved.
 //
 
 import Cocoa
