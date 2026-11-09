@@ -92,13 +92,15 @@ open class StartTorViewController: UIViewController {
                 }
             }
             catch {
-                self?.activityIndicator.isHidden = true
-                self?.retryBt.isHidden = false
-                self?.statusLb.text = error.localizedDescription
-                self?.statusLb.textColor = .systemRed
-                self?.statusLb.isHidden = false
+                await MainActor.run {
+                    self?.activityIndicator.isHidden = true
+                    self?.retryBt.isHidden = false
+                    self?.statusLb.text = error.localizedDescription
+                    self?.statusLb.textColor = .systemRed
+                    self?.statusLb.isHidden = false
 
-                UIAccessibility.post(notification: .announcement, argument: self?.statusLb.text)
+                    UIAccessibility.post(notification: .announcement, argument: self?.statusLb.text)
+                }
 
                 return
             }
