@@ -246,7 +246,7 @@ open class TorManagerBase {
             self.torController?.removeObserver(self.establishedObs)
             self.establishedObs = nil
 
-            let _: Bool = try await withCheckedThrowingContinuation { continuation in
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) in
                 self.establishedObs = self.torController?.addObserver(forCircuitEstablished: { established in
                     if smartConnectFailed {
                         return continuation.resume(throwing: Errors.smartConnectFailed)
@@ -256,7 +256,7 @@ open class TorManagerBase {
                         return
                     }
 
-                    continuation.resume(returning: true)
+                    continuation.resume(returning: ())
                 })
             }
 
