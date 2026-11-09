@@ -47,22 +47,20 @@ open class TorManager: TorManagerBase, BridgesConfDelegate {
         try? FileManager.default.createSecureDirIfNotExists(at: ptDir)
         Settings.stateLocation = ptDir
 
-        Task {
-            ipStatus = await withCheckedContinuation { continuation in
-                IpSupport.shared.start { status in
-                    continuation.resume(returning: status)
-                }
-            }
+        IpSupport.shared.start { [weak self] status in
+            self?.ipStatus = status
 
-            if connected {
-                do {
-                    try await torController?.setConfs(ipStatus.torConf(transport, Transport.asConf))
-                }
-                catch {
-                    self.log(error.localizedDescription)
-                }
+            if self?.connected ?? false {
+                Task {
+                    do {
+                        try await self?.torController?.setConfs(status.torConf(self?.transport ?? .none, Transport.asConf))
+                    }
+                    catch {
+                        self?.log(error.localizedDescription)
+                    }
 
-                await torController?.resetConnection()
+                    await self?.torController?.resetConnection()
+                }
             }
         }
     }
