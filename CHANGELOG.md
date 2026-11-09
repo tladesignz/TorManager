@@ -1,5 +1,12 @@
 # TorManager
 
+## 1.1.0
+- Updated dependencies.
+- Hooked `TorManager.reconfigureBridges()` on `BridgesConfDelegate.save()` so it actually does the useful thing automatically.
+- Added `summary` from C-Tor to `TorManager.start()`'s  progress callback.
+- Improved examples.
+- Added a `TorManager-iOS-UI` library with a localized `StartTorViewController` to show as a scene while starting Tor. Allows users to change bridges during startup.
+
 ## 1.0.0
 - Updated dependencies.
 - Changed API so it is fully async/await compatible.
