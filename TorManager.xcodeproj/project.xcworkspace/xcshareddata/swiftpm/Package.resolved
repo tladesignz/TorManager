@@ -15,17 +15,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/tladesignz/IPtProxy.git",
       "state" : {
-        "revision" : "46552b8422a200e3e69aa3686b6278be945138a5",
-        "version" : "5.7.0"
+        "revision" : "711a0ed9f5be0794814d04dc82aa9314db5b16db",
+        "version" : "5.8.1"
       }
     },
     {
       "identity" : "iptproxyui-ios",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/tladesignz/IPtProxyUI-ios",
+      "location" : "https://github.com/tladesignz/IPtProxyUI-ios.git",
       "state" : {
-        "revision" : "85c21e90a5457cfd6ca87a34a154e38843cef4e3",
-        "version" : "6.0.0"
+        "revision" : "e04f21812f0427ac27107b22fc52ac2f7dc9f5b1",
+        "version" : "6.1.0"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/iCepa/Tor.framework.git",
       "state" : {
-        "revision" : "c9c4dc20898ea9329a8ba4067aa2ea7c05de3860",
-        "version" : "409.15.3"
+        "revision" : "db4d31c2f9fe0773a175a23f1605cab7ab4d40a0",
+        "version" : "409.16.1"
       }
     }
   ],
