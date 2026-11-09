@@ -3,6 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "TorManager",
+    defaultLocalization: "en",
     platforms: [.iOS(.v15), .macOS(.v12)],
     products: [
         .library(name: "TorManager-iOS", targets: ["TorManager-iOS"]),
@@ -35,7 +36,10 @@ let package = Package(
             dependencies: [
                 "TorManager-iOS",
                 .product(name: "IPtProxyUI-iOS", package: "iptproxyui-ios"),
-            ]
+            ],
+            resources: [
+                .process("Resources")
+            ],
         ),
         .target(
             name: "TorManager-macOS",

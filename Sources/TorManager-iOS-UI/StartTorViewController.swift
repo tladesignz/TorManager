@@ -24,7 +24,7 @@ open class StartTorViewController: UIViewController {
 
     @IBOutlet weak var titleLb: UILabel! {
         didSet {
-            titleLb.text = NSLocalizedString("Starting Tor…", comment: "")
+            titleLb.text = NSLocalizedString("Starting Tor…", bundle: .module, comment: "")
         }
     }
 
@@ -32,7 +32,7 @@ open class StartTorViewController: UIViewController {
 
     @IBOutlet weak var retryBt: UIButton! {
         didSet {
-            retryBt.setTitle(NSLocalizedString("Retry", comment: ""), for: .normal)
+            retryBt.setTitle(NSLocalizedString("Retry", bundle: .module, comment: ""), for: .normal)
         }
     }
 
@@ -42,7 +42,7 @@ open class StartTorViewController: UIViewController {
 
     @IBOutlet weak var bridgesBt: UIButton! {
         didSet {
-            bridgesBt.setTitle(NSLocalizedString("Configure Bridges", comment: ""), for: .normal)
+            bridgesBt.setTitle(NSLocalizedString("Configure Bridges", bundle: .module, comment: ""), for: .normal)
         }
     }
 
