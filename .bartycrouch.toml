@@ -1,0 +1,23 @@
+[update]
+tasks = ["code", "normalize"]
+
+[update.code]
+codePaths = ["."]
+localizablePaths = ["Sources/TorManager-iOS-UI"]
+defaultToKeys = true
+additive = false
+unstripped = false
+plistArguments = false
+ignoreKeys = ["#bartycrouch-ignore!", "#bc-ignore!", "#i!"]
+
+[update.normalize]
+paths = ["Sources/TorManager-iOS-UI"]
+subpathsToIgnore = [""]
+sourceLocale = "en"
+harmonizeWithSource = true
+sortByKeys = true
+
+[lint]
+paths = ["Sources/TorManager-iOS-UI"]
+duplicateKeys = true
+emptyValues = true

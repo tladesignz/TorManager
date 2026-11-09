@@ -73,6 +73,7 @@
 				A02A7BEF309A0C62000F3135 /* CHANGELOG.md */,
 				A02A7BF0309A0C62000F3135 /* LICENSE */,
 				A02A7BEE309A0C62000F3135 /* .gitignore */,
+				A0ADC02030A1D8A000D612F2 /* .bartycrouch.toml */,
 				607FACD21AFB9204008FA782 /* Example iOS */,
 				A0F99C672B9B702600B5335A /* Example macOS */,
 				607FACD11AFB9204008FA782 /* Products */,
@@ -130,6 +131,7 @@
 			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "Example iOS" */;
 			buildPhases = (
 				607FACCC1AFB9204008FA782 /* Sources */,
+				A0ADC02130A1D8FC00D612F2 /* BartyCrouch */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
 			);
@@ -150,6 +152,7 @@
 			buildConfigurationList = A0F99C722B9B702700B5335A /* Build configuration list for PBXNativeTarget "Example macOS" */;
 			buildPhases = (
 				A0F99C622B9B702600B5335A /* Sources */,
+				A0ADC0C030A1E47F00D612F2 /* BartyCrouch */,
 				A0F99C632B9B702600B5335A /* Frameworks */,
 				A0F99C642B9B702600B5335A /* Resources */,
 			);
@@ -231,6 +234,47 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A0ADC02130A1D8FC00D612F2 /* BartyCrouch */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = BartyCrouch;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -f /opt/homebrew/bin/bartycrouch ]; then\n    /opt/homebrew/bin/bartycrouch update -x\n    /opt/homebrew/bin/bartycrouch lint -x\nelse\n    echo \"warning: BartyCrouch not installed. Download it form https://github.com/Flinesoft/BartyCrouch\"\nfi\n";
+		};
+		A0ADC0C030A1E47F00D612F2 /* BartyCrouch */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = BartyCrouch;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -f /opt/homebrew/bin/bartycrouch ]; then\n    /opt/homebrew/bin/bartycrouch update -x\n    /opt/homebrew/bin/bartycrouch lint -x\nelse\n    echo \"warning: BartyCrouch not installed. Download it form https://github.com/Flinesoft/BartyCrouch\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		607FACCC1AFB9204008FA782 /* Sources */ = {
