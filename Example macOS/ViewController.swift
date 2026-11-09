@@ -10,7 +10,7 @@ import Cocoa
 import WebKit
 import TorManager_macOS
 
-class ViewController: NSViewController {
+class ViewController: NSViewController, WKNavigationDelegate {
 
     private var webView: WKWebView!
 
@@ -41,8 +41,23 @@ class ViewController: NSViewController {
                 webView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
                 webView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
 
+                webView.navigationDelegate = self
+
                 webView.load(.init(url: .init(string: "https://check.torproject.org")!))
             }
         }
+    }
+
+
+    // MARK: WKNavigationDelegate
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        var title = webView.title
+
+        if title?.isEmpty ?? true {
+            title = webView.url?.host
+        }
+
+        self.view.window?.title = title ?? ""
     }
 }

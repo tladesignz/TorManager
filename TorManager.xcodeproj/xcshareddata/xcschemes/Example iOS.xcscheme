@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-               BuildableName = "TorManager_Example.app"
-               BlueprintName = "TorManager_Example"
+               BuildableName = "Example iOS.app"
+               BlueprintName = "Example iOS"
                ReferencedContainer = "container:TorManager.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,8 +45,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-            BuildableName = "TorManager_Example.app"
-            BlueprintName = "TorManager_Example"
+            BuildableName = "Example iOS.app"
+            BlueprintName = "Example iOS"
             ReferencedContainer = "container:TorManager.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -78,8 +78,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-            BuildableName = "TorManager_Example.app"
-            BlueprintName = "TorManager_Example"
+            BuildableName = "Example iOS.app"
+            BlueprintName = "Example iOS"
             ReferencedContainer = "container:TorManager.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -95,8 +95,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-            BuildableName = "TorManager_Example.app"
-            BlueprintName = "TorManager_Example"
+            BuildableName = "Example iOS.app"
+            BlueprintName = "Example iOS"
             ReferencedContainer = "container:TorManager.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

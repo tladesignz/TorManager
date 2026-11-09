@@ -9,14 +9,17 @@
 import UIKit
 import WebKit
 import TorManager_iOS
+import IPtProxyUI_iOS
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, WKNavigationDelegate {
 
     private var webView: WKWebView!
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        navigationItem.leftBarButtonItem = .init(barButtonSystemItem: .compose, target: self, action: #selector(configureBridges))
 
         let conf = WKWebViewConfiguration()
 
@@ -34,7 +37,33 @@ class ViewController: UIViewController {
         webView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         webView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
 
+        webView.navigationDelegate = self
+
         webView.load(.init(url: .init(string: "https://check.torproject.org")!))
+    }
+
+
+    // MARK: WKNavigationDelegate
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        var title = webView.title
+
+        if title?.isEmpty ?? true {
+            title = webView.url?.host
+        }
+
+        navigationItem.title = title
+    }
+
+
+    // MARK: Actions
+
+    @IBAction
+    open func configureBridges() {
+        let vc = BridgesConfViewController()
+        vc.delegate = TorManager.shared
+
+        present(UINavigationController(rootViewController: vc), animated: true)
     }
 }
 

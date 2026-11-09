@@ -15,7 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         Task {
-            let fullAuto = Settings.transport == .none
+            let fullAuto = Settings.transport == .none && (Settings.customBridges?.isEmpty ?? true) && Settings.countryCode == nil
 
             do {
                 try await TorManager.shared.start(autoConf: fullAuto, smartConnect: fullAuto) { progress, summary in

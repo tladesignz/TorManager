@@ -12,9 +12,10 @@
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
-		A006A826309A3FE7001D3C5F /* TorManager-iOS in Frameworks */ = {isa = PBXBuildFile; productRef = A006A825309A3FE7001D3C5F /* TorManager-iOS */; };
-		A006A828309A3FED001D3C5F /* TorManager-macOS in Frameworks */ = {isa = PBXBuildFile; productRef = A006A827309A3FED001D3C5F /* TorManager-macOS */; };
 		A02A74D73099F156000F3135 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A02A74D63099F156000F3135 /* SceneDelegate.swift */; };
+		A08B4B87309B891C00590927 /* CTor in Frameworks */ = {isa = PBXBuildFile; productRef = A08B4B86309B891C00590927 /* CTor */; };
+		A0ADBFC130A1D2D100D612F2 /* TorManager-iOS-UI in Frameworks */ = {isa = PBXBuildFile; productRef = A0ADBFC030A1D2D100D612F2 /* TorManager-iOS-UI */; };
+		A0ADBFC330A1D2D100D612F2 /* TorManager-macOS in Frameworks */ = {isa = PBXBuildFile; productRef = A0ADBFC230A1D2D100D612F2 /* TorManager-macOS */; };
 		A0F99C692B9B702600B5335A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F99C682B9B702600B5335A /* AppDelegate.swift */; };
 		A0F99C6B2B9B702600B5335A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F99C6A2B9B702600B5335A /* ViewController.swift */; };
 		A0F99C6D2B9B702700B5335A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0F99C6C2B9B702700B5335A /* Assets.xcassets */; };
@@ -22,7 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		607FACD01AFB9204008FA782 /* TorManager_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TorManager_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		607FACD01AFB9204008FA782 /* Example iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Example iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		607FACD71AFB9204008FA782 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -30,11 +31,11 @@
 		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		A02A74D63099F156000F3135 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		A02A7BEE309A0C62000F3135 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; name = .gitignore; path = ../.gitignore; sourceTree = SOURCE_ROOT; };
-		A02A7BEF309A0C62000F3135 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = SOURCE_ROOT; };
-		A02A7BF0309A0C62000F3135 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = SOURCE_ROOT; };
-		A02A7BF1309A0C62000F3135 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Package.swift; path = ../Package.swift; sourceTree = SOURCE_ROOT; };
-		A02A7BF2309A0C62000F3135 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = SOURCE_ROOT; };
+		A02A7BEE309A0C62000F3135 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = SOURCE_ROOT; };
+		A02A7BEF309A0C62000F3135 /* CHANGELOG.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.md; sourceTree = SOURCE_ROOT; };
+		A02A7BF0309A0C62000F3135 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = SOURCE_ROOT; };
+		A02A7BF1309A0C62000F3135 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = SOURCE_ROOT; };
+		A02A7BF2309A0C62000F3135 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		A0F99C662B9B702600B5335A /* Example macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Example macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0F99C682B9B702600B5335A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A0F99C6A2B9B702600B5335A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -48,7 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A006A826309A3FE7001D3C5F /* TorManager-iOS in Frameworks */,
+				A0ADBFC130A1D2D100D612F2 /* TorManager-iOS-UI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,7 +57,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A006A828309A3FED001D3C5F /* TorManager-macOS in Frameworks */,
+				A0ADBFC330A1D2D100D612F2 /* TorManager-macOS in Frameworks */,
+				A08B4B87309B891C00590927 /* CTor in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,9 +73,8 @@
 				A02A7BEF309A0C62000F3135 /* CHANGELOG.md */,
 				A02A7BF0309A0C62000F3135 /* LICENSE */,
 				A02A7BEE309A0C62000F3135 /* .gitignore */,
-				607FACD21AFB9204008FA782 /* Example for TorManager */,
+				607FACD21AFB9204008FA782 /* Example iOS */,
 				A0F99C672B9B702600B5335A /* Example macOS */,
-				A02A7BFF309A0EF9000F3135 /* Frameworks */,
 				607FACD11AFB9204008FA782 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -81,13 +82,13 @@
 		607FACD11AFB9204008FA782 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				607FACD01AFB9204008FA782 /* TorManager_Example.app */,
+				607FACD01AFB9204008FA782 /* Example iOS.app */,
 				A0F99C662B9B702600B5335A /* Example macOS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		607FACD21AFB9204008FA782 /* Example for TorManager */ = {
+		607FACD21AFB9204008FA782 /* Example iOS */ = {
 			isa = PBXGroup;
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
@@ -98,8 +99,7 @@
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
 				607FACD31AFB9204008FA782 /* Supporting Files */,
 			);
-			name = "Example for TorManager";
-			path = TorManager;
+			path = "Example iOS";
 			sourceTree = "<group>";
 		};
 		607FACD31AFB9204008FA782 /* Supporting Files */ = {
@@ -108,13 +108,6 @@
 				607FACD41AFB9204008FA782 /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		A02A7BFF309A0EF9000F3135 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		A0F99C672B9B702600B5335A /* Example macOS */ = {
@@ -132,9 +125,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		607FACCF1AFB9204008FA782 /* TorManager_Example */ = {
+		607FACCF1AFB9204008FA782 /* Example iOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "TorManager_Example" */;
+			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "Example iOS" */;
 			buildPhases = (
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
@@ -144,12 +137,12 @@
 			);
 			dependencies = (
 			);
-			name = TorManager_Example;
+			name = "Example iOS";
 			packageProductDependencies = (
-				A006A825309A3FE7001D3C5F /* TorManager-iOS */,
+				A0ADBFC030A1D2D100D612F2 /* TorManager-iOS-UI */,
 			);
 			productName = TorManager;
-			productReference = 607FACD01AFB9204008FA782 /* TorManager_Example.app */;
+			productReference = 607FACD01AFB9204008FA782 /* Example iOS.app */;
 			productType = "com.apple.product-type.application";
 		};
 		A0F99C652B9B702600B5335A /* Example macOS */ = {
@@ -166,7 +159,8 @@
 			);
 			name = "Example macOS";
 			packageProductDependencies = (
-				A006A827309A3FED001D3C5F /* TorManager-macOS */,
+				A08B4B86309B891C00590927 /* CTor */,
+				A0ADBFC230A1D2D100D612F2 /* TorManager-macOS */,
 			);
 			productName = "Example macOS";
 			productReference = A0F99C662B9B702600B5335A /* Example macOS.app */;
@@ -204,13 +198,13 @@
 			);
 			mainGroup = 607FACC71AFB9204008FA782;
 			packageReferences = (
-				A02A7BFC309A0EED000F3135 /* XCLocalSwiftPackageReference "../../TorManager" */,
+				A0ADBFBF30A1D2D100D612F2 /* XCLocalSwiftPackageReference "../TorManager" */,
 			);
 			productRefGroup = 607FACD11AFB9204008FA782 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				607FACCF1AFB9204008FA782 /* TorManager_Example */,
+				607FACCF1AFB9204008FA782 /* Example iOS */,
 				A0F99C652B9B702600B5335A /* Example macOS */,
 			);
 		};
@@ -408,7 +402,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = TorManager/Info.plist;
+				INFOPLIST_FILE = "Example iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -429,7 +423,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = "";
-				INFOPLIST_FILE = TorManager/Info.plist;
+				INFOPLIST_FILE = "Example iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -533,7 +527,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "TorManager_Example" */ = {
+		607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "Example iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				607FACF01AFB9204008FA782 /* Debug */,
@@ -554,21 +548,23 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		A02A7BFC309A0EED000F3135 /* XCLocalSwiftPackageReference "../../TorManager" */ = {
+		A0ADBFBF30A1D2D100D612F2 /* XCLocalSwiftPackageReference "../TorManager" */ = {
 			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../TorManager;
+			relativePath = ../TorManager;
 		};
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		A006A825309A3FE7001D3C5F /* TorManager-iOS */ = {
+		A08B4B86309B891C00590927 /* CTor */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A02A7BFC309A0EED000F3135 /* XCLocalSwiftPackageReference "../../TorManager" */;
-			productName = "TorManager-iOS";
+			productName = CTor;
 		};
-		A006A827309A3FED001D3C5F /* TorManager-macOS */ = {
+		A0ADBFC030A1D2D100D612F2 /* TorManager-iOS-UI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A02A7BFC309A0EED000F3135 /* XCLocalSwiftPackageReference "../../TorManager" */;
+			productName = "TorManager-iOS-UI";
+		};
+		A0ADBFC230A1D2D100D612F2 /* TorManager-macOS */ = {
+			isa = XCSwiftPackageProductDependency;
 			productName = "TorManager-macOS";
 		};
 /* End XCSwiftPackageProductDependency section */
