@@ -19,6 +19,10 @@ open class StartTorViewController: UIViewController {
 
     open weak var torManager: TorManager?
 
+    open var autoConf = false
+
+    open var smartConnect = false
+
     open weak var delegate: StartTorViewControllerDelegate?
 
 
@@ -74,7 +78,9 @@ open class StartTorViewController: UIViewController {
 
         Task { [weak self] in
             do {
-                try await self?.torManager?.start() { progress, summary in
+                try await self?.torManager?.start(autoConf: self?.autoConf ?? false, smartConnect: self?.smartConnect ?? false) {
+                    progress, summary in
+
                     Task { @MainActor in
                         self?.progressView.setProgress(Float(progress) / 100, animated: true)
 
