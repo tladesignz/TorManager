@@ -191,7 +191,7 @@ open class TorManager: TorManagerBase, BridgesConfDelegate {
 
     open override func doAutoConf(_ smartConnect: Bool) async {
         do {
-            try await AutoConf(self).do()
+            try await AutoConf(self).do(countryCode: Settings.countryCode)
         }
         catch {
             self.log("auto-conf error=\(error)")
