@@ -1,15 +1,14 @@
 # TorManager
 
-[![Version](https://img.shields.io/cocoapods/v/TorManager.svg?style=flat)](https://cocoapods.org/pods/TorManager)
-[![License](https://img.shields.io/cocoapods/l/TorManager.svg?style=flat)](https://cocoapods.org/pods/TorManager)
-[![Platform](https://img.shields.io/cocoapods/p/TorManager.svg?style=flat)](https://cocoapods.org/pods/TorManager)
+[![Swift Package](https://img.shields.io/badge/SPM-Compatible-swift.svg?style=flat)](https://github.com/apple/swift-package-manager)
+[![Version](https://img.shields.io/github/v/tag/tladesignz/TorManager.svg?style=flat)](https://github.com/tladesignz/TorManager/tags)
+[![License](https://img.shields.io/github/license/tladesignz/TorManager?style=flat)](https://github.com/tladesignz/TorManager/blob/main/LICENSE)
+[![Platform](https://img.shields.io/badge/platform-iOS%20%7C%20macOS-lightgrey.svg?style=flat)](https://github.com/tladesignz/TorManager/blob/main/Package.swift)
 
 The easiest way to integrate Tor and Pluggable Transports into your app.
 
 This library bundles all building blocks to integrate Tor into your app:
-- Tor.framework using
-  - C-Tor
-  - GeoIP files
+- Tor.framework using C-Tor
 - IPtProxyUI using
   - Lyrebird Pluggable Transport
   - Snowflake Pluggable Transport
@@ -88,7 +87,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 
-For more details, see the [Tor.framework README](https://github.com/iCepa/Tor.framework/blob/pure_pod/README.md)
+For more details, see the [Tor.framework README](https://github.com/iCepa/Tor.framework/blob/spm/README.md)
 
 
 ### iOS Orbot support
@@ -104,18 +103,9 @@ Please add the following to your `Info.plist` file for Orbot support to work:
 
 ## Installation
 
-TorManager is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+TorManager is available through [Swift Package Manager](https://github.com/apple/swift-package-manager). To install
+it, simply add this repository to your Xcode dependencies.
 
-```ruby
-pod 'TorManager'
-```
-
-## Build
-
-```sh
-pod trunk push --allow-warnings
-```
 
 ## Author
 
