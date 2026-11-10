@@ -1,5 +1,11 @@
 # TorManager
 
+## 1.1.1
+- Fixed IP stack updates. That's *not* a place for `withCheckedContinuation`…
+- Make sure UI calls happen on main thread.
+- Make use of `countryCode` in `AutoConf` calls.
+- Pass through `autoConf` and `smartConnect` options in `StartTorViewController`.
+
 ## 1.1.0
 - Updated dependencies.
 - Hooked `TorManager.reconfigureBridges()` on `BridgesConfDelegate.save()` so it actually does the useful thing automatically.
