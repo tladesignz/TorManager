@@ -8,6 +8,7 @@
 
 import UIKit
 import TorManager_iOS
+import IPtProxyUI_Shared
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,4 +20,16 @@ extension TorManager {
    static let shared = TorManager(
     directory: FileManager.default.urls(
         for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("tor", isDirectory: true))
+}
+
+extension Settings {
+
+    class var firstRunDone: Bool {
+        get {
+            defaults?.bool(forKey: "firstRunDone") ?? false
+        }
+        set {
+            defaults?.set(newValue, forKey: "firstRunDone")
+        }
+    }
 }

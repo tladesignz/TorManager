@@ -9,16 +9,15 @@
 import Cocoa
 import TorManager_macOS
 import IPtProxyUI_macOS
+import IPtProxyUI_Shared
 
 @main
 class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         Task {
-            let fullAuto = Settings.transport == .none && (Settings.customBridges?.isEmpty ?? true) && Settings.countryCode == nil
-
             do {
-                try await TorManager.shared.start(autoConf: fullAuto, smartConnect: fullAuto) { progress, summary in
+                try await TorManager.shared.start(autoConf: !Settings.firstRunDone, smartConnect: true) { progress, summary in
                     print("progress=\(progress), summary=\(summary ?? "(nil)")")
                 }
             }
@@ -27,6 +26,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             }
 
             NotificationCenter.default.post(name: .init("tor-ready"), object: nil)
+
+            Settings.firstRunDone = true
 
 //            let config = URLSessionConfiguration.default
 //            config.connectionProxyDictionary = TorManager.shared.torSocks5ProxyConf
@@ -80,4 +81,16 @@ extension TorManager {
    static let shared = TorManager(
     directory: FileManager.default.urls(
         for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("tor", isDirectory: true))
+}
+
+extension Settings {
+
+    class var firstRunDone: Bool {
+        get {
+            defaults?.bool(forKey: "firstRunDone") ?? false
+        }
+        set {
+            defaults?.set(newValue, forKey: "firstRunDone")
+        }
+    }
 }

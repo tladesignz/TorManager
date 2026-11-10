@@ -9,6 +9,7 @@
 import UIKit
 import TorManager_iOS_UI
 import TorManager_iOS
+import IPtProxyUI_Shared
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate, StartTorViewControllerDelegate {
 
@@ -26,7 +27,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, StartTorViewControllerD
     func sceneDidBecomeActive(_ scene: UIScene) {
         let vc = StartTorViewController()
         vc.torManager = TorManager.shared
+        vc.autoConf = !Settings.firstRunDone
+        vc.smartConnect = true
         vc.delegate = self
+
+        Settings.firstRunDone = true
 
         show(vc)
     }
