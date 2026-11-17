@@ -11,7 +11,6 @@ import Foundation
 public enum Errors: LocalizedError {
     case orbotRunningNoBypass
     case cookieUnreadable
-    case noSocksAddr
     case smartConnectFailed
 
     public var errorDescription: String? {
@@ -21,9 +20,6 @@ public enum Errors: LocalizedError {
 
         case .cookieUnreadable:
             return "Tor cookie unreadable."
-
-        case .noSocksAddr:
-            return "No Tor SOCKS port provided by Tor."
 
         case .smartConnectFailed:
             return "Smart Connect failed."

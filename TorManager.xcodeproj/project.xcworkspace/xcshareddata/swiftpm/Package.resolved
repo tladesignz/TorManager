@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/iCepa/Tor.framework.git",
       "state" : {
-        "revision" : "db4d31c2f9fe0773a175a23f1605cab7ab4d40a0",
-        "version" : "409.16.1"
+        "revision" : "9c5df82840cd83a62b592293c2e53249ffa1e083",
+        "version" : "409.17.1"
       }
     }
   ],

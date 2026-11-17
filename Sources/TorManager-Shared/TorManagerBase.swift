@@ -46,42 +46,54 @@ open class TorManagerBase {
             return nil
         }
 
-        let host: IPv4Address
+        let host: NWEndpoint.Host
 
-        if let hostString = torSocks5Host, let hostAddr = IPv4Address(hostString) {
-            host = hostAddr
+        if let hostString = torSocks5Host, !hostString.isEmpty {
+            if let hostAddr = IPv4Address(hostString) {
+                host = .ipv4(hostAddr)
+            }
+            else if let hostAddr = IPv6Address(hostString) {
+                host = .ipv6(hostAddr)
+            }
+            else {
+                host = .name(hostString, nil)
+            }
         }
         else {
-            host = .loopback
+            host = .ipv4(.loopback)
         }
 
-        return .hostPort(host: .ipv4(host), port: port)
+        return .hostPort(host: host, port: port)
     }
 
     /**
      SOCKS5 proxy configuration of the started Tor to use with ``URLSessionConfiguration.connectionProxyDictionary``.
      */
-    public var torSocks5ProxyConf: [AnyHashable: Any]? {
-        guard connected, let port = torSocks5Port?.rawValue else {
+    public private(set) var torSocks5ProxyConf: [AnyHashable: Any]? = nil
+
+    /**
+     SOCKS5 host of the started Tor. (Should be "localhost")
+     */
+    public var torSocks5Host: String? {
+        guard connected else {
             return nil
         }
 
-        return [
-            kCFProxyTypeKey: kCFProxyTypeSOCKS,
-            kCFStreamPropertySOCKSVersion: kCFStreamSocketSOCKSVersion5,
-            kCFStreamPropertySOCKSProxyHost: torSocks5Host ?? "127.0.0.1",
-            kCFStreamPropertySOCKSProxyPort: port]
+        return torSocks5ProxyConf?[kCFStreamPropertySOCKSProxyHost] as? String
     }
-
-    /**
-     SOCKS5 host of the started Tor. (Should be "127.0.0.1")
-     */
-    public private(set) var torSocks5Host: String? = nil
 
     /**
      SOCKS5 port of the started Tor.
      */
-    public private(set) var torSocks5Port: NWEndpoint.Port? = nil
+    public var torSocks5Port: NWEndpoint.Port? {
+        guard connected,
+              let port = torSocks5ProxyConf?[kCFStreamPropertySOCKSProxyPort] as? UInt16
+        else {
+            return nil
+        }
+
+        return .init(rawValue: port)
+    }
 
     /**
      The `TorThread` in which Tor is running.
@@ -167,8 +179,7 @@ open class TorManagerBase {
             return
         }
 
-        torSocks5Host = nil
-        torSocks5Port = nil
+        torSocks5ProxyConf = nil
 
         if autoConf {
             await doAutoConf(smartConnect)
@@ -266,18 +277,7 @@ open class TorManagerBase {
             self.torController?.removeObserver(self.progressObs)
             self.progressObs = nil
 
-            let response = await self.torController?.info(forKeys: ["net/listeners/socks"])
-
-            guard let parts = response?.first?.split(separator: ":"),
-                  let host = parts.first,
-                  let port = parts.last,
-                  let port = NWEndpoint.Port(String(port))
-            else {
-                throw Errors.noSocksAddr
-            }
-
-            self.torSocks5Host = String(host)
-            self.torSocks5Port = port
+            self.torSocks5ProxyConf = try await self.torController?.connectionProxyDictionary()
         }
         catch {
             self.stopSmartGuard()
@@ -291,8 +291,7 @@ open class TorManagerBase {
      Stops Tor and any used Pluggable Transport.
      */
     open func stop() {
-        torSocks5Host = nil
-        torSocks5Port = nil
+        torSocks5ProxyConf = nil
 
         torController?.removeObserver(establishedObs)
         establishedObs = nil

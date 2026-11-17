@@ -12,7 +12,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/tladesignz/IPtProxyUI-ios.git", from: "6.1.0"),
-        .package(url: "https://github.com/iCepa/Tor.framework.git", from: "409.16.1"),
+        .package(url: "https://github.com/iCepa/Tor.framework.git", from: "409.17.1"),
         .package(url: "https://github.com/guardianproject/orbotkit.git", from: "2.0.0"),
     ],
     targets: [
