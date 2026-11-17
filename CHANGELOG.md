@@ -1,5 +1,8 @@
 # TorManager
 
+## 1.1.2
+- Updated Tor.framework dependency to 409.17.1 (Tor 0.4.9.17).
+
 ## 1.1.1
 - Fixed IP stack updates. That's *not* a place for `withCheckedContinuation`…
 - Make sure UI calls happen on main thread.
